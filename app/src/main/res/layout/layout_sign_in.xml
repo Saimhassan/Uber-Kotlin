@@ -40,10 +40,6 @@
             android:text="Sign In with Email"
             android:drawableStart="@drawable/fui_ic_googleg_color_24dp"/>
 
-
-
-
-
     </LinearLayout>
 
 </RelativeLayout>
