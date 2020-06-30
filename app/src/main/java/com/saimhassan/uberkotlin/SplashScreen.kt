@@ -16,8 +16,10 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.saimhassan.uberkotlin.Model.DriverInfoModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.actiity_splash_screen.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -133,7 +135,24 @@ class SplashScreen : AppCompatActivity() {
             }
             else
             {
+               val model = DriverInfoModel()
+                model.firstName = edt_first_name.text.toString()
+                model.lastName = edt_last_name.text.toString()
+                model.phoneNumber = edt_phone_number.text.toString()
+                model.rating = 0.0
 
+                driverInfoRef.child(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .setValue(model)
+                    .addOnFailureListener{e->
+                        Toast.makeText(this@SplashScreen,""+e.message,Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        progress_bar.visibility = View.GONE
+                    }
+                    .addOnSuccessListener {
+                        Toast.makeText(this@SplashScreen,"Register successfully",Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        progress_bar.visibility = View.GONE
+                    }
             }
         }
 
