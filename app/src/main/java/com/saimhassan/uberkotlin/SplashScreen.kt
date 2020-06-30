@@ -4,10 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import io.reactivex.Completable
@@ -93,7 +98,13 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun showRegisterLayout() {
-        TODO("Not yet implemented")
+        val builder = AlertDialog.Builder(this,R.style.DialogTheme)
+        val itemiew = LayoutInflater.from(this).inflate(R.layout.layout_register,null)
+
+        val edt_first_name = itemiew.findViewById<View>(R.id.edt_first_name) as TextInputEditText
+        val edt_last_name = itemiew.findViewById<View>(R.id.edt_last_name) as TextInputEditText
+        val edt_phone_number = itemiew.findViewById<View>(R.id.edit_phone_number) as TextInputEditText
+        val btn_register = itemiew.findViewById<View>(R.id.btn_continue) as Button
     }
 
     private fun showLoginLayout() {
