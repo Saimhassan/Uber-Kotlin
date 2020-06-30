@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.*
@@ -23,6 +24,8 @@ class SplashScreen : AppCompatActivity() {
     private lateinit var providers:List<AuthUI.IdpConfig>
     private lateinit var firebaseAuth:FirebaseAuth
     private lateinit var listener:FirebaseAuth.AuthStateListener
+    private lateinit var database:FirebaseDatabase
+    private lateinit var driverInfoRef:DatabaseReference
 
     override fun onStart() {
         super.onStart()
@@ -41,14 +44,16 @@ class SplashScreen : AppCompatActivity() {
             })
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.actiity_splash_screen)
         init()
 
     }
 
     private fun init() {
+        database = FirebaseDatabase.getInstance()
+        driverInfoRef = database.getReference(Common.DRIVER_INFO_REF)
         providers = Arrays.asList(
             AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
@@ -58,10 +63,37 @@ class SplashScreen : AppCompatActivity() {
         listener = FirebaseAuth.AuthStateListener { myFirebaseAuth ->
             val user = myFirebaseAuth.currentUser
             if (user != null)
-                Toast.makeText(this@SplashScreen,"Welcome"+user.uid,Toast.LENGTH_SHORT).show()
+            {
+                checkUserFromFirebase()
+            }
             else
                 showLoginLayout()
         }
+    }
+
+    private fun checkUserFromFirebase() {
+        driverInfoRef.child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .addListenerForSingleValueEvent(object:ValueEventListener{
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@SplashScreen,error.message,Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists())
+                    {
+                        Toast.makeText(this@SplashScreen,"user already register",Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                    {
+                       showRegisterLayout()
+                    }
+                }
+
+            })
+    }
+
+    private fun showRegisterLayout() {
+        TODO("Not yet implemented")
     }
 
     private fun showLoginLayout() {
