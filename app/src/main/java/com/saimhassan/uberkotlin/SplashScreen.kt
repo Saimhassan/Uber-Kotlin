@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -105,6 +106,38 @@ class SplashScreen : AppCompatActivity() {
         val edt_last_name = itemiew.findViewById<View>(R.id.edt_last_name) as TextInputEditText
         val edt_phone_number = itemiew.findViewById<View>(R.id.edit_phone_number) as TextInputEditText
         val btn_register = itemiew.findViewById<View>(R.id.btn_continue) as Button
+
+        //Set Data
+        if (FirebaseAuth.getInstance().currentUser!!.phoneNumber != null && !TextUtils.isDigitsOnly(FirebaseAuth.getInstance().currentUser!!.phoneNumber))
+
+            //View
+            builder.setView(itemiew)
+            val dialog = builder.create()
+            dialog.show()
+        //Event
+        btn_register.setOnClickListener{
+            if (TextUtils.isDigitsOnly(edt_first_name.text.toString()))
+            {
+                Toast.makeText(this@SplashScreen,"Please enter first name",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else if (TextUtils.isDigitsOnly(edt_last_name.text.toString()))
+            {
+                Toast.makeText(this@SplashScreen,"Please enter last name",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (TextUtils.isDigitsOnly(edt_phone_number.text.toString()))
+            {
+                Toast.makeText(this@SplashScreen,"Please enter phone number",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else
+            {
+
+            }
+        }
+
+
     }
 
     private fun showLoginLayout() {
